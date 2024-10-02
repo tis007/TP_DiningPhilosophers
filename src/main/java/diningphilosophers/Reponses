@@ -1,0 +1,5 @@
+Il y a 3 baguettes une entre chaque philosophe.
+
+la synchronisation est faite grace a des méthodes take et release dans la classe ChopStick
+
+Cette solution entraine des interblocages(deadlock) si les philosophes prennent les baguettes en meme temps.

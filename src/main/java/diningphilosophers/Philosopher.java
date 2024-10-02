@@ -17,14 +17,14 @@ public class Philosopher extends Thread {
     }
 
     private void think() throws InterruptedException {
-        System.out.println("M."+this.getName()+" pense... ");
-        sleep(delai+new Random().nextInt(delai+1));
-        System.out.println("M."+this.getName()+" arrête de penser");
+        System.out.println("M." + this.getName() + " pense... ");
+        sleep(delai + new Random().nextInt(delai + 1));
+        System.out.println("M." + this.getName() + " arrête de penser");
     }
 
     private void eat() throws InterruptedException {
-        System.out.println("M."+this.getName() + " mange...");
-        sleep(delai+new Random().nextInt(delai+1));
+        System.out.println("M." + this.getName() + " mange...");
+        sleep(delai + new Random().nextInt(delai + 1));
         //System.out.println("M."+this.getName()+" arrête de manger");
     }
 
@@ -34,25 +34,32 @@ public class Philosopher extends Thread {
             try {
                 think();
                 // Aléatoirement prendre la baguette de gauche puis de droite ou l'inverse
-                switch(new Random().nextInt(2)) {
+                switch (new Random().nextInt(2)) {
                     case 0:
-                        myLeftStick.take();
-                        think(); // pour augmenter la probabilité d'interblocage
-                        myRightStick.take();
-                        break;
+                        tryEat(myLeftStick, myRightStick);
                     case 1:
-                        myRightStick.take();
-                        think(); // pour augmenter la probabilité d'interblocage
-                        myLeftStick.take();
+                        tryEat(myRightStick, myLeftStick);
                 }
-                // Si on arrive ici, on a pu "take" les 2 baguettes
-                eat();
-                // On libère les baguettes :
-                myLeftStick.release();
-                myRightStick.release();
-                // try again
+
             } catch (InterruptedException ex) {
                 Logger.getLogger("Table").log(Level.SEVERE, "{0} Interrupted", this.getName());
+            }
+        }
+    }
+
+    public void tryEat(ChopStick right, ChopStick left) throws InterruptedException {
+        if (left.take()) {
+            System.out.println("M." + this.getName() + " a pris la baguette gauche");
+            think();
+            if (right.take()) {
+                System.out.println("M." + this.getName() + " a pris la baguette droite");
+                eat();
+                System.out.println("M." + this.getName() + "a mangé");
+                right.release();
+                left.release();
+
+            } else {
+                left.release();
             }
         }
     }
@@ -60,6 +67,7 @@ public class Philosopher extends Thread {
     // Permet d'interrompre le philosophe "proprement" :
     // Il relachera ses baguettes avant de s'arrêter
     public void leaveTable() {
+        System.out.println("M." + this.getName() + " quitte la table");
         running = false;
     }
 
