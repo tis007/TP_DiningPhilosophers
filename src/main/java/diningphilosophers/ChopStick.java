@@ -20,7 +20,7 @@ public class ChopStick {
             }
         }
         iAmFree = false;
-        System.out.println("baguette " + myNumber + " prise");
+        //System.out.println("baguette " + myNumber + " prise");
         return true;
     }
 

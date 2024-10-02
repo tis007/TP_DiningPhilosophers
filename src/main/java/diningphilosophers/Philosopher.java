@@ -49,10 +49,10 @@ public class Philosopher extends Thread {
 
     public void tryEat(ChopStick right, ChopStick left) throws InterruptedException {
         if (left.take()) {
-            System.out.println("M." + this.getName() + " a pris la baguette gauche");
+            System.out.println("M." + this.getName() + " a pris la baguette #" + right.toString());
             think();
             if (right.take()) {
-                System.out.println("M." + this.getName() + " a pris la baguette droite");
+                System.out.println("M." + this.getName() + " a pris la baguette #" + right.toString());
                 eat();
                 System.out.println("M." + this.getName() + "a mangé");
                 right.release();
